@@ -1,0 +1,9 @@
+# Ignora las dependencias de Node.js para las estadísticas de lenguaje
+frontend/node_modules/* linguist-vendored
+
+# Ignora la carpeta de compilación/build de Angular
+frontend/dist/* linguist-vendored
+
+# Si tienes un entorno virtual de Python en el repo (aunque debería estar en .gitignore)
+venv/* linguist-vendored
+*.venv/* linguist-vendored

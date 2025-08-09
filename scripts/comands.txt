@@ -1,0 +1,98 @@
+Paso 1: Crear el Entorno Virtual 
+-python3 -m venv venv_scripts
+Ahora deberías ver una nueva carpeta llamada venv_scripts/ en tu proyecto.
+
+Paso 2: Activar el Entorno Virtual
+-source venv_scripts/bin/activate
+Tu terminal ahora debería mostrar (venv_scripts) al principio, indicando que el entorno está activo.
+
+Paso 3: Instalar los Requerimientos
+Ahora que estás dentro del entorno, vamos a instalar las bibliotecas desde tu archivo requirements.txt. Para ser consistentes y evitar problemas, usaremos python3 aquí también.
+# Nos movemos a la carpeta de scripts
+-cd scripts
+# Usamos python3 -m pip para asegurarnos de que usamos el pip del entorno
+-python3 -m pip install -r requirements.txt
+Nota: Es probable que pip install -r requirements.txt funcione solo, porque al activar el entorno, pip ya apunta al correcto. Pero usar python3 -m pip es más explícito y seguro.
+
+Paso 4: Ejecutar tu Script
+Ahora que todo está instalado, puedes ejecutar tu scraper.
+# Estando aún en la carpeta scripts/
+-python3 scraper_definitivo.py
+Si has vuelto a la raíz, el comando sería python3 scripts/scraper_final.py.
+
+Paso 5: Desactivar el Entorno
+Cuando el script termine, puedes salir del entorno virtual.
+-deactivate
+
+----------
+Consejo Adicional (Opcional)
+Tu sistema también sugirió: la orden «python» del paquete deb «python-is-python3».
+Esto significa que puedes instalar un pequeño paquete que crea un "alias" o "acceso directo". Si lo instalas, el comando python empezará a funcionar y apuntará a python3.
+Si quieres hacer esto para no tener que recordar escribir python3 cada vez, puedes ejecutar:
+Generated bash
+sudo apt update
+sudo apt install python-is-python3
+Use code with caution.
+Bash
+Después de esto, el comando python debería funcionar como un sinónimo de python3. Sin embargo, te recomiendo que te acostumbres a usar python3, ya que es más explícito y te evitará problemas si alguna vez trabajas en un sistema con múltiples versiones de Python.
+¡Ahora tienes todo para que funcione! ¡Adelante
+-----------
+Postgress
+
+Método de acceso para desarrollo: peer
+Entonces, para resumir tu flujo de trabajo a partir de ahora,
+cada vez que necesites acceder a la base de datos como el superusuario postgres,
+simplemente usa:
+
+sudo -u postgres psql
+Y si quieres conectarte a una base de datos específica como recommender, sería:
+
+-sudo -u postgres psql -d recommender
+
+Para despertar el servicio postgresql: 
+-sudo systemctl start postgresql / sudo systemctl stop postgresql / sudo systemctl restart postgresql / sudo systemctl status postgresql 
+
+Machete de comandos más usados:
+
+¡Claro! Aquí tienes un "popurrí" con los comandos más útiles de psql y SQL para PostgreSQL, ideal para el día a día.
+
+Los divido en dos categorías: los que usas dentro de la terminal de psql (empiezan con \) y los comandos SQL estándar.
+
+Dentro de la Terminal psql (Meta-Comandos)
+Estos son atajos increíblemente útiles para inspeccionar tu base de datos sin necesidad de hacer consultas SQL completas.
+
+Comando	Descripción
+\l	Lista todas las bases de datos en el servidor.
+\c [db]	Se conecta a otra base de datos. Ej: \c recommender
+\dt	Muestra las tablas del esquema actual.
+\d [tabla]	Describe una tabla (columnas, tipos, etc.). Ej: \d books
+\dn	Muestra los esquenas (schemas).
+\df	Muestra las funciones.
+\du	Muestra los usuarios (roles) y sus permisos.
+\timing	Activa/desactiva un cronómetro que muestra cuánto tarda cada consulta.
+\i [archivo]	Ejecuta comandos SQL desde un archivo. Ej: \i setup.sql
+\?	Muestra la ayuda de todos los meta-comandos.
+\q	Quit / Salir de la terminal psql.
+
+Comandos SQL (Lenguaje Estándar)
+Estos son los comandos SQL que usarás para crear, leer, actualizar y borrar datos y estructuras.
+
+Manipulación de Datos (DML - Data Manipulation Language)
+Comando	Ejemplo
+SELECT	SELECT title, author FROM books WHERE year > 2020;
+INSERT	INSERT INTO books (title, author) VALUES ('Dune', 'Frank Herbert');
+UPDATE	UPDATE books SET stock = 10 WHERE id = 1;
+DELETE	DELETE FROM books WHERE author = 'Poe';
+Definición de Estructuras (DDL - Data Definition Language)
+Comando	Ejemplo
+CREATE TABLE	CREATE TABLE users (id SERIAL PRIMARY KEY, email VARCHAR(100) UNIQUE);
+ALTER TABLE	ALTER TABLE users ADD COLUMN created_at TIMESTAMP;
+DROP TABLE	DROP TABLE old_users;
+CREATE INDEX	CREATE INDEX idx_author ON books (author);
+Administración de Usuarios y Permisos (DCL - Data Control Language)
+Comando	Ejemplo
+CREATE ROLE	CREATE ROLE cheche LOGIN PASSWORD 'mi_contraseña_segura';
+GRANT	GRANT SELECT, INSERT ON books TO cheche;
+REVOKE	REVOKE INSERT ON books FROM cheche;
+DROP ROLE	DROP ROLE cheche;
+Con esta lista tienes más que suficiente para manejar la gran mayoría de las tareas de desarrollo en PostgreSQL.

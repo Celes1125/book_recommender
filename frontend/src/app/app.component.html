@@ -1,0 +1,95 @@
+<div class="container">
+  <div class="auth-section">
+    <ng-container *ngIf="loggedIn; else loggedOut">
+      <span class="user-email">Ciao, {{ currentUser?.email }}</span>
+      <button (click)="signOut()" class="btn-auth">Esci</button>
+    </ng-container>
+    <ng-template #loggedOut>
+      <button (click)="signInWithGoogle()" class="btn-auth">Accedi con Google</button>
+    </ng-template>
+  </div>
+
+  <h1>Assistente Bibliotecario</h1>
+  <p class="subtitle">
+    Inserisci un titolo che hai amato e lascia che ti guidi verso la tua prossima lettura.
+  </p>
+
+  <div class="formulario">
+    <div class="search-input-container">
+      <input
+        type="text"
+        [(ngModel)]="titleSearching"
+        placeholder="Inserisci il libro che ti è piaciuto"
+        (keyup.enter)="searchRecommendations()"
+        (input)="onTitleInputChange()"
+        [disabled]="loading || !loggedIn"
+      />
+      <div *ngIf="showSuggestions && suggestions.length > 0" class="suggestions-list">
+        <div *ngFor="let suggestion of suggestions" 
+             (click)="selectSuggestion(suggestion)" 
+             class="suggestion-item">
+          {{ suggestion }}
+        </div>
+      </div>
+    </div>
+    
+    <!-- Button group removed -->
+  </div>
+
+  <div *ngIf="loading" class="loading">
+    <div class="loading-spinner"></div>
+    <p>Ci siamo quasi. L'IA de Gemini está preparando el análisis personalizado para cada sugerencia.</p>
+  </div>
+
+  <div *ngIf="error" class="error">
+    ⚠️ {{ error }}
+  </div>
+
+  <div #resultsContainer class="results" *ngIf="results.length > 0 && !loading">
+    <div class="results-header">
+      <h2>Libri consigliati:</h2>
+      <button 
+        (click)="deepDive()" 
+        [disabled]="loading || isDeepDiveButtonDisabled || !loggedIn"
+        class="btn-secondary"
+        title="Analizza le raccomandazioni con l'IA de Gemini">
+        ✨ <span class="btn-text">Approfondisci</span>
+      </button>
+    </div>
+    <div class="tarjeta" *ngFor="let book of results">
+      <div class="tarjeta-header">
+        <div class="tarjeta-icon">📚</div>
+        <div style="flex: 1;">
+          <h3>{{ book.titolo }}</h3>
+          <p class="tarjeta-author">{{ book.autore }}</p>
+        </div>
+      </div>
+
+      <div class="tarjeta-meta">
+        <div class="tarjeta-meta-item">
+          📅 <span>{{ book.anno }}</span>
+        </div>
+        <div class="tarjeta-meta-item">
+          📍 <span>{{ book.collocazione }}</span>
+        </div>
+      </div>
+
+      <div>
+        <p><strong>Sinossi:</strong></p>
+        <p>{{ book.synopsis }}</p>
+      </div>
+
+      <div *ngIf="book.analysis" class="analysis-section">
+        <div class="analysis-header">
+          <span>💡</span>
+          <h4>Perché ti potrebbe piacere:</h4>
+        </div>
+        <p class="analysis-content">{{ book.analysis }}</p>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="!loading && results.length === 0 && !error && !loggedIn" class="empty-state">
+    <p>Por favor, inicia sesión para usar la aplicación.</p>
+  </div>
+</div>

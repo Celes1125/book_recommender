@@ -1,0 +1,59 @@
+/* Importar la fuente Poppins */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
+/* Sistema de diseño con variables CSS */
+:root {
+  /* Colores base */
+  --background: hsl(248, 50%, 97%);
+  --foreground: hsl(222, 84%, 5%);
+  --card: hsl(0, 0%, 100%);
+  --card-foreground: hsl(222, 84%, 5%);
+  
+  /* Colores primarios */
+  --primary: hsl(213, 32%, 43%);
+  --primary-foreground: hsl(210, 40%, 98%);
+  --primary-hover: hsl(213, 32%, 35%);
+  
+  /* Colores secundarios */
+  --secondary: hsl(210, 40%, 94%);
+  --secondary-foreground: hsl(222, 47%, 11%);
+  --muted: hsl(210, 40%, 96%);
+  --muted-foreground: hsl(215, 16%, 47%);
+  --accent: hsl(213, 32%, 91%);
+  --accent-foreground: hsl(213, 32%, 15%);
+  
+  /* Estados */
+  --destructive: hsl(0, 84%, 60%);
+  --destructive-foreground: hsl(210, 40%, 98%);
+  --success: hsl(142, 76%, 36%);
+  --warning: hsl(38, 92%, 50%);
+  
+  /* Bordes y inputs */
+  --border: hsl(214, 32%, 91%);
+  --input: hsl(214, 32%, 91%);
+  --ring: hsl(213, 32%, 43%);
+  
+  /* Gradientes */
+  --gradient-primary: linear-gradient(135deg, hsl(213, 32%, 43%), hsl(213, 32%, 35%));
+  --gradient-card: linear-gradient(135deg, hsl(0, 0%, 100%), hsl(210, 40%, 98%));
+  --gradient-bg: linear-gradient(135deg, hsl(248, 50%, 97%), hsl(210, 40%, 96%));
+  
+  /* Sombras */
+  --shadow-elegant: 0 4px 20px -2px hsl(213, 32%, 43%, 0.1);
+  --shadow-card: 0 2px 10px -1px hsl(213, 32%, 43%, 0.08);
+  --shadow-input: 0 1px 3px hsl(213, 32%, 43%, 0.1);
+  
+  /* Radio de bordes */
+  --radius: 0.75rem;
+  
+  /* Transiciones */
+  --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  background: var(--gradient-bg);
+  color: var(--foreground);
+  margin: 0;
+  min-height: 100vh;
+}
