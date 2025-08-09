@@ -54,3 +54,4 @@ testem.log
 Thumbs.db
 frontend/.angular/cache/
 backend/firebase_credentials.json
+frontend/src/environments/environment.ts
