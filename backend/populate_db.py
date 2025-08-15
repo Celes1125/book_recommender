@@ -57,16 +57,14 @@ df['synopsis'] = df['synopsis'].astype(str)
 embeddings = model.encode(df['synopsis'].tolist(), show_progress_bar=True)
 print(f"Se generaron {len(embeddings)} vectores.")
 
-# English: 4. Connect to the database
-# Español: 4. Conectarse a la base de datos
-# Italiano: 4. Connettersi al database
+# English: 4. Connect to the database using the DATABASE_URL environment variable
+# Español: 4. Conectarse a la base de datos usando la variable de entorno DATABASE_URL
+# Italiano: 4. Connettersi al database utilizzando la variabile d'ambiente DATABASE_URL
 try:
-    conn = psycopg2.connect(
-        dbname="recommender",
-        user="postgres",
-        password=os.getenv("DB_KEY"),
-        host="localhost"
-    )
+    database_url = os.getenv("DATABASE_URL")
+    if not database_url:
+        raise ValueError("La variable de entorno DATABASE_URL no está configurada.")
+    conn = psycopg2.connect(database_url)
     cur = conn.cursor()
     print("Conexión a la base de datos PostgreSQL exitosa.")
 except psycopg2.OperationalError as e:

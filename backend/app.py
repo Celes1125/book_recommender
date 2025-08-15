@@ -15,13 +15,14 @@ CORS(app)
 load_dotenv()
 
 # --- Firebase Initialization ---
-# English: Path to your Firebase service account key JSON file
-# Español: Ruta a tu archivo JSON de clave de cuenta de servicio de Firebase
-# Italiano: Percorso al tuo file JSON della chiave dell'account di servizio Firebase
-FIREBASE_CREDENTIALS_PATH = os.path.join(os.path.dirname(__file__), "firebase_credentials.json")
+# Path to Firebase credentials. For production (e.g., Render), this is set via
+# an environment variable. For local development, it defaults to a local file.
+cred_path = os.getenv("FIREBASE_CREDENTIALS_PATH")
+if not cred_path:
+    cred_path = os.path.join(os.path.dirname(__file__), "firebase_credentials.json")
 
 try:
-    cred = credentials.Certificate(FIREBASE_CREDENTIALS_PATH)
+    cred = credentials.Certificate(cred_path)
     firebase_admin.initialize_app(cred)
     print("Firebase Admin SDK initialized successfully.")
 except Exception as e:
@@ -69,16 +70,14 @@ def firebase_auth_required(f):
     return decorated_function
 
 # --- Database Configuration ---
-DB_CONFIG = {
-    "dbname": "recommender",
-    "user": "postgres",
-    "password": os.getenv("DB_KEY"),
-    "host": "localhost"
-}
-
+# The connection is configured via the DATABASE_URL environment variable provided by Render.
 def get_db_connection():
     try:
-        conn = psycopg2.connect(**DB_CONFIG)
+        database_url = os.getenv("DATABASE_URL")
+        if not database_url:
+            raise ValueError("La variable de entorno DATABASE_URL no está configurada.")
+        
+        conn = psycopg2.connect(database_url)
         return conn
     except psycopg2.OperationalError as e:
         print(f"Error al conectar con la base de datos: {e}")

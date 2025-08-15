@@ -1,6 +1,6 @@
 # Usa una imagen oficial de Python como base. 
 # La etiqueta "slim" es una versión ligera, ideal para producción.
-FROM python:3.9-slim
+FROM python:3.11-slim
 
 # Establece el directorio de trabajo dentro del contenedor.
 WORKDIR /app
