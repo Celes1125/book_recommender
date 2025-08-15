@@ -1,5 +1,5 @@
 export const environment = {
-  production: false,
+  production: true,
   firebaseConfig: {
     apiKey: "AIzaSyAFpxhOifSOx3Glrcm76DUq_pxLjhhu0xc",
     authDomain: "book-recommender-fe795.firebaseapp.com",
@@ -8,5 +8,5 @@ export const environment = {
     messagingSenderId: "69561009801",
     appId: "1:69561009801:web:e042240fdba905a0afa858"
   },
-  apiUrl: 'http://localhost:5000'
+  apiUrl: process.env['NG_APP_API_URL']
 };
