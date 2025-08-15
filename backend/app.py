@@ -11,7 +11,7 @@ from firebase_admin import credentials, auth
 from functools import wraps
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, origins=["https://book-recommender-l9xn.vercel.app", "http://localhost:4200"], supports_credentials=True)
 load_dotenv()
 
 # --- Firebase Initialization ---
