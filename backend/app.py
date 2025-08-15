@@ -39,7 +39,7 @@ except Exception as e:
 # Español: IMPORTANTE: En un entorno de producción, carga esto desde una variable de entorno o una configuración segura.
 # Italiano: IMPORTANTE: In un ambiente di produzione, caricalo da una variabile d'ambiente o da una configurazione sicura.
 AUTHORIZED_EMAILS = os.getenv("AUTHORIZED_EMAILS", "").split(',')
-if not AUTHORIZED_EMAILS or AUTHORIZED_EMAILS == ['']:
+if not AUTHORIZED_EMAILS or AUTHORIZED_EMAILS == [""]:
     print("WARNING: AUTHORIZED_EMAILS is not set or is empty. No users will be authorized.")
     AUTHORIZED_EMAILS = [] # Ensure it's an empty list if not set
 
@@ -89,7 +89,7 @@ model = genai.GenerativeModel(
     'gemini-1.5-flash-latest',
     system_instruction="Sei un critico letterario esperto. Rispondi sempre e solo in italiano.")
 
-@app.route('/recomend', methods=['POST'])
+@app.route('/api/recomend', methods=['POST'])
 @firebase_auth_required
 def recommend():
     conn = None
@@ -103,7 +103,7 @@ def recommend():
         conn = get_db_connection()
         cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
 
-        search_pattern = f"%{title.strip()}%"
+        search_pattern = f"%{title.strip()}%")
         cur.execute("SELECT id, titolo, embedding FROM books WHERE TRIM(titolo) ILIKE %s", (search_pattern,))
         matching_books = cur.fetchall()
 
@@ -143,7 +143,7 @@ def recommend():
         if conn is not None:
             conn.close()
 
-@app.route('/deep_dive', methods=['POST'])
+@app.route('/api/deep_dive', methods=['POST'])
 @firebase_auth_required
 def deep_dive():
     conn = None
@@ -203,8 +203,7 @@ IMPORTANTE: Fornisci solo le analisi, separate dal delimitatore '|||'. Non inclu
         if conn is not None:
             conn.close()
 
-@app.route('/suggest_titles', methods=['GET'])
-
+@app.route('/api/suggest_titles', methods=['GET'])
 def suggest_titles():
     conn = None
     try:

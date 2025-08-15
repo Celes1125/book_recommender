@@ -87,7 +87,7 @@ export class AppComponent implements OnInit {
 
     try {
       const headers = await this.getAuthHeaders();
-      this.http.post<any[]>(`${environment.apiUrl}/recomend`, { titolo: this.titleSearching }, { headers }).subscribe({
+            this.http.post<any[]>(`${environment.apiUrl}/api/recomend`, { titolo: this.titleSearching }, { headers }).subscribe({
         next: (data) => {
           this.results = data;
           this.loading = false;
@@ -110,7 +110,7 @@ export class AppComponent implements OnInit {
     this.isDeepDiveButtonDisabled = true; // Disable deep dive button when input changes
     if (this.titleSearching.trim().length > 1) {
       // No authentication needed for suggestions, as it's a public endpoint (for now)
-      this.http.get<string[]>(`${environment.apiUrl}/suggest_titles?query=${this.titleSearching.trim()}`).subscribe({
+            this.http.get<string[]>(`${environment.apiUrl}/api/suggest_titles?query=${this.titleSearching.trim()}`).subscribe({
         next: (data) => {
           this.suggestions = data;
           this.showSuggestions = true;
@@ -139,7 +139,7 @@ export class AppComponent implements OnInit {
 
     try {
       const headers = await this.getAuthHeaders();
-      this.http.post<any>(`${environment.apiUrl}/deep_dive`, { titolo: this.titleSearching, recommendations: this.results }, { headers }).subscribe({
+            this.http.post<any>(`${environment.apiUrl}/api/deep_dive`, { titolo: this.titleSearching, recommendations: this.results }, { headers }).subscribe({
         next: (data) => {
           console.log("Datos recibidos de deepDive:", data);
           this.results.forEach(book => {
