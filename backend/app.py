@@ -2,7 +2,6 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 import psycopg2
 import psycopg2.extras
-import numpy as np
 from dotenv import load_dotenv
 import os
 import google.generativeai as genai
@@ -103,7 +102,7 @@ def recommend():
         conn = get_db_connection()
         cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
 
-        search_pattern = f"%{title.strip()}%")
+        search_pattern = f"%{title.strip()}%"
         cur.execute("SELECT id, titolo, embedding FROM books WHERE TRIM(titolo) ILIKE %s", (search_pattern,))
         matching_books = cur.fetchall()
 
