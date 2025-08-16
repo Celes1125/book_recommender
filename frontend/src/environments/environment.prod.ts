@@ -1,12 +1,12 @@
 export const environment = {
   production: true,
   firebaseConfig: {
-    apiKey: "AIzaSyAFpxhOifSOx3Glrcm76DUq_pxLjhhu0xc",
-    authDomain: "book-recommender-fe795.firebaseapp.com",
-    projectId: "book-recommender-fe795",
-    storageBucket: "book-recommender-fe795.firebasestorage.app",
-    messagingSenderId: "69561009801",
-    appId: "1:69561009801:web:e042240fdba905a0afa858"
+    apiKey: process.env['NG_APP_FIREBASE_API_KEY'],
+    authDomain: process.env['NG_APP_FIREBASE_AUTH_DOMAIN'],
+    projectId: process.env['NG_APP_FIREBASE_PROJECT_ID'],
+    storageBucket: process.env['NG_APP_FIREBASE_STORAGE_BUCKET'],
+    messagingSenderId: process.env['NG_APP_FIREBASE_MESSAGING_SENDER_ID'],
+    appId: process.env['NG_APP_FIREBASE_APP_ID']
   },
   apiUrl: process.env['NG_APP_API_URL']
 };
