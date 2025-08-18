@@ -147,7 +147,7 @@ def recommend():
 
         # Español: Buscamos libros que coincidan con el título que nos dieron.
         # English: We search for books that match the title we were given.
-        search_pattern = f"%{title.strip()}%")
+        search_pattern = f"%{title.strip()}%"
         cur.execute("SELECT id, titolo, embedding FROM books WHERE TRIM(titolo) ILIKE %s", (search_pattern,))
         matching_books = cur.fetchall()
 
