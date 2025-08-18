@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { Injectable } from '@angular/core';
 import { getAuth, GoogleAuthProvider, signInWithPopup, User } from 'firebase/auth';
 import { from, Observable } from 'rxjs';
 
