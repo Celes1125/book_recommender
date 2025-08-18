@@ -34,16 +34,12 @@ export class AppComponent implements OnInit {
   constructor(private http: HttpClient, private authService: AuthService) {}
 
   ngOnInit(): void {
-    this.authService.getRedirectResult().subscribe(user => {
-      if (user) {
-        this.currentUser = user;
-        this.loggedIn = !!user;
-      }
-    });
-
     this.authService.getCurrentUser().subscribe(user => {
       this.currentUser = user;
       this.loggedIn = !!user;
+      if (user) {
+        // Potentially handle post-login logic here if needed
+      }
     });
   }
 
