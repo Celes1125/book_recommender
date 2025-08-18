@@ -1,7 +1,7 @@
 export const environment = {
   production: false,
   firebaseConfig: {
-    apiKey: "AIzaSyAFpxhOifSOx3Glrcm76DUq_pxLjhhu0xc",
+    apiKey: "AIzaSyCf2cqJR3MSIN02Jv95oGn-iI1omhFW3hs",
     authDomain: "book-recommender-fe795.firebaseapp.com",
     projectId: "book-recommender-fe795",
     storageBucket: "book-recommender-fe795.firebasestorage.app",
@@ -10,3 +10,5 @@ export const environment = {
   },
   apiUrl: 'http://localhost:5000'
 };
+
+

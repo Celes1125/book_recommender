@@ -1,3 +1,9 @@
+// Este script se utiliza para inyectar variables de entorno en el archivo de configuración de producción de Angular (environment.prod.ts).
+// Lee el archivo `environment.prod.ts`, busca marcadores de posición con el formato `process.env['NOMBRE_VARIABLE']`,
+// y los reemplaza con los valores reales de las variables de entorno disponibles en el sistema (cargadas desde un archivo .env).
+// Esto es crucial para mantener la seguridad y la portabilidad de la aplicación, permitiendo que secretos como claves de API
+// se configuren en el entorno de despliegue (por ejemplo, un contenedor Docker) en lugar de estar codificados en el código fuente.
+
 require('dotenv').config();
 const fs = require('fs');
 const path = require('path');
