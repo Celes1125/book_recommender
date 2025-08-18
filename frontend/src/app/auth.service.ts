@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { getAuth, GoogleAuthProvider, signInWithPopup, User } from 'firebase/auth';
 import { from, Observable } from 'rxjs';
 
@@ -12,10 +13,8 @@ export class AuthService {
 
   signInWithGoogle(): Observable<User | null> {
     const provider = new GoogleAuthProvider();
-    return from(signInWithPopup(this.auth, provider).then(result => result.user));
+    return from(signInWithPopup(this.auth, provider).then(result => result?.user || null));
   }
-
-  
 
   signOut(): Observable<void> {
     return from(this.auth.signOut());
