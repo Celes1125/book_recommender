@@ -49,7 +49,6 @@ export class AppComponent implements OnInit {
         // The ngOnInit subscription will handle updating currentUser and loggedIn
         // Any specific post-login UI updates can go here if needed,
         // but generally, the ngOnInit subscription is sufficient.
-        console.log('User signed in:', user);
       },
       error: (error) => {
         console.error('Google sign-in error:', error);
