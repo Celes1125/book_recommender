@@ -21,10 +21,11 @@ export class AuthService {
 
   getCurrentUser(): Observable<User | null> {
     return new Observable(observer => {
-      this.auth.onAuthStateChanged(user => {
+      const unsubscribe = this.auth.onAuthStateChanged(user => {
         observer.next(user);
-        observer.complete();
       });
+      // Return an unsubscribe function to clean up the listener when the observable is unsubscribed
+      return () => unsubscribe();
     });
   }
 
