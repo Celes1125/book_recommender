@@ -43,13 +43,19 @@ export class AppComponent implements OnInit {
     });
   }
 
-  async signInWithGoogle(): Promise<void> {
-    try {
-      await this.authService.signInWithGoogle();
-    } catch (error) {
-      console.error('Google sign-in error:', error);
-      this.error = 'Error al iniciar sesión con Google.';
-    }
+  signInWithGoogle(): void {
+    this.authService.signInWithGoogle().subscribe({
+      next: (user) => {
+        // The ngOnInit subscription will handle updating currentUser and loggedIn
+        // Any specific post-login UI updates can go here if needed,
+        // but generally, the ngOnInit subscription is sufficient.
+        console.log('User signed in:', user);
+      },
+      error: (error) => {
+        console.error('Google sign-in error:', error);
+        this.error = 'Error al iniciar sesión con Google.';
+      }
+    });
   }
 
   async signOut(): Promise<void> {
