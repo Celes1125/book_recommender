@@ -34,6 +34,13 @@ export class AppComponent implements OnInit {
   constructor(private http: HttpClient, private authService: AuthService) {}
 
   ngOnInit(): void {
+    this.authService.getRedirectResult().subscribe(user => {
+      if (user) {
+        this.currentUser = user;
+        this.loggedIn = !!user;
+      }
+    });
+
     this.authService.getCurrentUser().subscribe(user => {
       this.currentUser = user;
       this.loggedIn = !!user;
@@ -42,10 +49,7 @@ export class AppComponent implements OnInit {
 
   async signInWithGoogle(): Promise<void> {
     try {
-      const user = await this.authService.signInWithGoogle().toPromise();
-      this.currentUser = user || null;
-      this.loggedIn = !!user;
-      console.log('User signed in:', this.currentUser?.email);
+      await this.authService.signInWithGoogle();
     } catch (error) {
       console.error('Google sign-in error:', error);
       this.error = 'Error al iniciar sesión con Google.';

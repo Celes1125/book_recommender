@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { getAuth, GoogleAuthProvider, signInWithPopup, User } from 'firebase/auth';
+import { getAuth, GoogleAuthProvider, signInWithRedirect, User, getRedirectResult } from 'firebase/auth';
 import { from, Observable } from 'rxjs';
 
 @Injectable({
@@ -10,9 +10,13 @@ export class AuthService {
 
   constructor() { }
 
-  signInWithGoogle(): Observable<User> {
+  signInWithGoogle(): Observable<void> {
     const provider = new GoogleAuthProvider();
-    return from(signInWithPopup(this.auth, provider).then(result => result.user));
+    return from(signInWithRedirect(this.auth, provider));
+  }
+
+  getRedirectResult(): Observable<User | null> {
+    return from(getRedirectResult(this.auth).then(result => result?.user || null));
   }
 
   signOut(): Observable<void> {
