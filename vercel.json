@@ -1,4 +1,5 @@
 {
-  "buildCommand": "pnpm --filter ./frontend build:prod",
+  "installCommand": "pnpm install",
+  "buildCommand": "cd frontend && node set-env.js && pnpm run build:prod",
   "outputDirectory": "frontend/dist/browser"
 }
