@@ -1,5 +1,5 @@
 {
   "installCommand": "pnpm install",
-  "buildCommand": "cd frontend && pnpm run build",
+  "buildCommand": "pnpm --filter ./frontend run build",
   "outputDirectory": "frontend/dist/temp-app/browser"
 }
