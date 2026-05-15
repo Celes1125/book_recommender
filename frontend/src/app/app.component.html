@@ -5,7 +5,7 @@
       <button (click)="signOut()" class="btn-auth">Esci</button>
     </ng-container>
     <ng-template #loggedOut>
-      <button (click)="signInWithGoogle()" class="btn-auth">Accedi con Google</button>
+      <button (click)="signInWithGoogle()" class="btn-auth" id="btn-login" name="btn-login">Accedi con Google</button>
     </ng-template>
   </div>
 
@@ -18,6 +18,8 @@
     <div class="search-input-container">
       <input
         type="text"
+        id="book-title-search"
+        name="book-title-search"
         [(ngModel)]="titleSearching"
         placeholder="Inserisci il libro che ti è piaciuto"
         (keyup.enter)="searchRecommendations()"
@@ -32,8 +34,6 @@
         </div>
       </div>
     </div>
-    
-    <!-- Button group removed -->
   </div>
 
   <div *ngIf="loading" class="loading">
@@ -52,6 +52,8 @@
         (click)="deepDive()" 
         [disabled]="loading || isDeepDiveButtonDisabled || !loggedIn"
         class="btn-secondary"
+        id="btn-deep-dive"
+        name="btn-deep-dive"
         title="Analizza le raccomandazioni con l'IA de Gemini">
         ✨ <span class="btn-text">Approfondisci</span>
       </button>
