@@ -1,5 +1,4 @@
 {
-  "installCommand": "pnpm install",
-  "buildCommand": "cd frontend && node set-env.js && pnpm run build:prod",
-  "outputDirectory": "frontend/dist/browser"
+  "buildCommand": "node set-env.js && pnpm run build:prod",
+  "outputDirectory": "dist/browser"
 }
