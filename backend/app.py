@@ -171,7 +171,7 @@ IMPORTANTE: Fornisci solo le analisi, separate dal delimitatore '|||'. Non inclu
         # AQUÍ ESTÁ EL CAMBIO CRÍTICO: Forzamos la api_version='v1'
         response = model.generate_content(
             prompt,
-            request_options=RequestOptions(api_version='v1')
+            request_options=RequestOptions(version='v1')
         )
         
         analyses = response.text.split('|||')
