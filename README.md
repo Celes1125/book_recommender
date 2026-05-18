@@ -4,7 +4,7 @@
 
 ## Description
 
-This application acts as a virtual librarian assistant, providing personalized reading recommendations based on a user's tastes. By entering the title of a book they have enjoyed, users receive five recommendations for similar books from the library's catalog.
+This is a **Progressive Web Application (PWA)** that acts as a virtual librarian assistant, providing personalized reading recommendations based on a user's tastes. By entering the title of a book they have enjoyed, users receive five recommendations for similar books from the library's catalog.
 
 The application goes beyond simple content matching, analyzing style, genre, and other literary characteristics to provide high-quality recommendations. Each recommendation is accompanied by a detailed analysis, explaining why the book has been suggested, similar to the advice of a literary expert.
 
@@ -14,6 +14,7 @@ The application's data universe is based on the catalog of a specific library in
 
 ## Features
 
+*   **PWA (Progressive Web App):** Installable on mobile and desktop for a native-like experience.
 *   **Personalized recommendations:** Get 5 book recommendations based on a single title.
 *   **In-depth analysis:** Understand why each book was recommended.
 *   **Based on the library's catalog:** All recommended books are available in the local library.
@@ -28,7 +29,7 @@ The application's data universe is based on the catalog of a specific library in
 
 ### Prerequisites
 
-*   Node.js and npm
+*   Node.js and **pnpm**
 *   Python 3.12+ and pip
 
 ### Backend
@@ -44,7 +45,7 @@ pip install -r requirements.txt
 
 ```bash
 cd frontend
-npm install
+pnpm install
 ```
 
 ## Usage
@@ -61,7 +62,7 @@ flask run
 
 ```bash
 cd frontend
-ng serve
+pnpm start
 ```
 
 Open your browser and go to `http://localhost:4200/`.

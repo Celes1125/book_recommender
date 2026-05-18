@@ -4,7 +4,7 @@
 
 ## Descripción
 
-Esta aplicación actúa como un asistente de bibliotecario virtual, proporcionando recomendaciones de lectura personalizadas basadas en los gustos de un usuario. Al introducir el título de un libro que han disfrutado, los usuarios reciben cinco recomendaciones de libros similares del catálogo de la biblioteca.
+Esta es una **Aplicación Web Progresiva (PWA)** que actúa como un asistente de bibliotecario virtual, proporcionando recomendaciones de lectura personalizadas basadas en los gustos de un usuario. Al introducir el título de un libro que han disfrutado, los usuarios reciben cinco recomendaciones de libros similares del catálogo de la biblioteca.
 
 La aplicación va más allá de la simple coincidencia de contenido, analizando el estilo, el género y otras características literarias para proporcionar recomendaciones de alta calidad. Cada recomendación va acompañada de un análisis detallado, que explica por qué se ha sugerido el libro, de forma similar al asesoramiento de un experto literario.
 
@@ -14,6 +14,7 @@ El universo de datos de la aplicación se basa en el catálogo de una biblioteca
 
 ## Características
 
+*   **PWA (Aplicación Web Progresiva):** Instalable en móviles y escritorio para una experiencia similar a una app nativa.
 *   **Recomendaciones personalizadas:** Obtén 5 recomendaciones de libros basadas en un solo título.
 *   **Análisis en profundidad:** Comprende por qué se recomendó cada libro.
 *   **Basado en el catálogo de la biblioteca:** Todos los libros recomendados están disponibles en la biblioteca local.
@@ -28,7 +29,7 @@ El universo de datos de la aplicación se basa en el catálogo de una biblioteca
 
 ### Prerrequisitos
 
-*   Node.js y npm
+*   Node.js y **pnpm**
 *   Python 3.12+ y pip
 
 ### Backend
@@ -44,7 +45,7 @@ pip install -r requirements.txt
 
 ```bash
 cd frontend
-npm install
+pnpm install
 ```
 
 ## Uso
@@ -61,7 +62,7 @@ flask run
 
 ```bash
 cd frontend
-ng serve
+pnpm start
 ```
 
 Abre tu navegador y ve a `http://localhost:4200/`.
