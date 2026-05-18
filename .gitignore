@@ -55,3 +55,8 @@ Thumbs.db
 frontend/.angular/cache/
 backend/firebase_credentials.json
 frontend/src/environments/environment.ts
+frontend/src/environments/environment.prod.ts
+venv_populate/
+.env
+__pycache__/
+*.pyc

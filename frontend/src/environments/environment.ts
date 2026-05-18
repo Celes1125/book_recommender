@@ -8,5 +8,7 @@ export const environment = {
     messagingSenderId: 'development_messaging',
     appId: 'development_app'
   },
-  apiUrl: 'http://localhost:5000'
+  apiUrl: 'http://localhost:5000',
+  DATABASE_URL: "postgresql://postgres:6oNaTph0afI13Giu@db.ijqdjvutfcxzwjqzuwwn.supabase.co:5432/postgres"
+
 };
