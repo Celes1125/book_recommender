@@ -119,7 +119,7 @@ genai.configure(api_key=gemini_api_key)
 # Español: Le damos a Gemini sus instrucciones: es un experto y debe hablar siempre en italiano.
 # English: We give Gemini its instructions: it's an expert and must always speak Italian.
 model = genai.GenerativeModel(
-    'gemini-1.5-flash-latest',
+    'gemini-1.5-flash',
     system_instruction="Sei un critico letterario esperto. Rispondi sempre e solo in italiano.")
 
 # --- Rutas de la API ---
