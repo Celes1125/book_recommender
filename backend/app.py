@@ -39,7 +39,7 @@ AUTHORIZED_EMAILS = os.getenv("AUTHORIZED_EMAILS", "").split(',')
 if not AUTHORIZED_EMAILS or AUTHORIZED_EMAILS == [""]:
     AUTHORIZED_EMAILS = []
 
-# --- Decorador de Autenticación ---
+# --- Decorador de Autenticación (CORREGIDO) ---
 def firebase_auth_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
@@ -48,10 +48,11 @@ def firebase_auth_required(f):
             return jsonify({"error": "Authorization header missing."}), 401
         try:
             id_token = auth_header.split(' ')[1]
+            # Aquí se verifica el token y se asigna a 'decoded_token'
             decoded_token = auth.verify_id_token(id_token)
             user_email = decoded_token.get('email')
             if user_email and user_email in AUTHORIZED_EMAILS:
-                request.current_user = decorated_token
+                request.current_user = decoded_token
                 return f(*args, **kwargs)
             else:
                 return jsonify({"error": "Unauthorized: Email not in whitelist."}), 403
@@ -196,7 +197,6 @@ def suggest_titles():
         conn = get_db_connection()
         cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
         cur.execute("SELECT DISTINCT titolo FROM books WHERE TRIM(titolo) ILIKE %s ORDER BY titolo LIMIT 10", (f"%{search_query.strip()}%",))
-        # Corregido el bucle duplicado aquí
         suggestions = [row['titolo'] for row in cur.fetchall()]
         cur.close()
         return jsonify(suggestions), 200
