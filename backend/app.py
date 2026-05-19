@@ -6,8 +6,6 @@ import psycopg2.extras
 from dotenv import load_dotenv
 import os
 import google.generativeai as genai
-# IMPORTANTE: Esta es la pieza clave para solucionar el error 404
-from google.generativeai.types import RequestOptions 
 import firebase_admin
 from firebase_admin import credentials, auth
 from functools import wraps
@@ -74,11 +72,12 @@ def get_db_connection():
 
 # --- Configuración de Gemini ---
 gemini_api_key = os.getenv("GEMINI_API_KEY")
+os.environ["google_generativeai_api_version"] = "v1"
 genai.configure(api_key=gemini_api_key)
 
 # Usamos gemini-1.5-flash que es el estándar actual y gratuito
 model = genai.GenerativeModel(
-    model_name='gemini-1.5-flash',
+    model_name='models/gemini-1.5-flash',
     system_instruction="Sei un critico letterario esperto. Rispondi sempre e solo in italiano."
 )
 
@@ -171,7 +170,7 @@ IMPORTANTE: Fornisci solo le analisi, separate dal delimitatore '|||'. Non inclu
         # AQUÍ ESTÁ EL CAMBIO CRÍTICO: Forzamos la api_version='v1'
         response = model.generate_content(
             prompt,
-            request_options=RequestOptions(version='v1')
+            
         )
         
         analyses = response.text.split('|||')
