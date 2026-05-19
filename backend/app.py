@@ -5,7 +5,7 @@ import psycopg2
 import psycopg2.extras
 from dotenv import load_dotenv
 import os
-import google.generativeai as genai
+import requests  # <-- Cambiamos la librería nativa por requests para control total de la URL
 import firebase_admin
 from firebase_admin import credentials, auth
 from functools import wraps
@@ -72,13 +72,6 @@ def get_db_connection():
 
 # --- Configuración de Gemini ---
 gemini_api_key = os.getenv("GEMINI_API_KEY")
-genai.configure(api_key=gemini_api_key)
-
-# Usamos gemini-1.5-flash que es el estándar actual y gratuito
-model = genai.GenerativeModel(
-    model_name='gemini-pro',
-    system_instruction="Sei un critico letterario esperto. Rispondi sempre e solo in italiano."
-)
 
 # --- Rutas de la API ---
 
@@ -166,13 +159,39 @@ Analizza la somiglianza di ciascun libro consigliato con il libro di riferimento
 IMPORTANTE: Fornisci solo le analisi, separate dal delimitatore '|||'. Non includere i titoli dei libri.
 """
 
-        # AQUÍ ESTÁ EL CAMBIO CRÍTICO: Forzamos la api_version='v1'
-        response = model.generate_content(
-            prompt,
-            
-        )
+        # Petición HTTP Directa forzando la API estable v1 y usando el modelo gemini-1.5-flash
+        url = f"https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key={gemini_api_key}"
         
-        analyses = response.text.split('|||')
+        headers = {
+            'Content-Type': 'application/json'
+        }
+        
+        payload = {
+            "contents": [{
+                "parts": [{"text": prompt}]
+            }],
+            "systemInstruction": {
+                "parts": [{"text": "Sei un critico letterario esperto. Rispondi sempre e solo in italiano."}]
+            }
+        }
+
+        response = requests.post(url, json=payload, headers=headers)
+        response_data = response.json()
+
+        # Si Google responde un error (como API key inválida o cuota), lo capturamos
+        if response.status_code != 200:
+            print(f"DEBUG ERROR GOOGLE API: {response_data}")
+            error_msg = response_data.get('error', {}).get('message', 'Error desconocido')
+            return jsonify({"error": "Error en la API de Google.", "details": error_msg}), response.status_code
+
+        # Extraemos el texto generado de la respuesta JSON
+        try:
+            ai_text = response_data['candidates'][0]['content']['parts'][0]['text']
+        except KeyError:
+            print(f"DEBUG ESTRUCTURA INESPERADA: {response_data}")
+            return jsonify({"error": "Estructura de respuesta inesperada de la IA."}), 500
+        
+        analyses = ai_text.split('|||')
         analysis_by_title = {}
 
         for i, rec in enumerate(recommendations):
@@ -184,7 +203,6 @@ IMPORTANTE: Fornisci solo le analisi, separate dal delimitatore '|||'. Non inclu
         cur.close()
         return jsonify({"analysis": analysis_by_title})
     except Exception as e:
-        # Imprimimos el error en los logs de Render para verlo
         print(f"DEBUG ERROR: {str(e)}")
         return jsonify({"error": "Error en Gemini.", "details": str(e)}), 500
     finally:
