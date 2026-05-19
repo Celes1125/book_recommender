@@ -5,13 +5,14 @@ import psycopg2
 import psycopg2.extras
 from dotenv import load_dotenv
 import os
-import requests
+import google.generativeai as genai
 import firebase_admin
 from firebase_admin import credentials, auth
 from functools import wraps
 
 app = Flask(__name__)
 
+# Configuración de CORS
 CORS(app, origins=[
     "http://localhost:4200",
     "https://book-recommender-rosy.vercel.app",
@@ -50,7 +51,7 @@ def firebase_auth_required(f):
             decoded_token = auth.verify_id_token(id_token)
             user_email = decoded_token.get('email')
             if user_email and user_email in AUTHORIZED_EMAILS:
-                request.current_user = decoded_token
+                request.current_user = decorated_token
                 return f(*args, **kwargs)
             else:
                 return jsonify({"error": "Unauthorized: Email not in whitelist."}), 403
@@ -72,6 +73,13 @@ def get_db_connection():
 
 # --- Configuración de Gemini ---
 gemini_api_key = os.getenv("GEMINI_API_KEY")
+genai.configure(api_key=gemini_api_key)
+
+# Usamos el modelo correcto 'gemini-1.5-flash' configurado de forma limpia
+model = genai.GenerativeModel(
+    model_name='gemini-1.5-flash',
+    system_instruction="Sei un critico letterario esperto. Rispondi sempre e solo in italiano."
+)
 
 # --- Rutas de la API ---
 
@@ -148,49 +156,21 @@ def deep_dive():
             [f" - Titolo: {rec['titolo']}, Sinossi: {rec['synopsis']}" for rec in recommendations]
         )
 
-        # Inyectamos las instrucciones de comportamiento directamente en el prompt principal
-        # para máxima compatibilidad con el endpoint estable v1 básico de HTTP
-        prompt = f"""Tu sei un critico letterario esperto. Rispondi sempre e solo in lingua italiana.
-
+        prompt = f"""
 Libro di riferimento: '{original_title}'
 Sinossi di riferimento: {original_synopsis}
 
-Libri consigliati da analizzare:
+Libri consigliati:
 {recommendations_text}
 
-Analizza la somiglianza di ciascun libro consigliato con il libro di riferimento, considerando lo stile, il genere, la trama, l'ambientazione e il tono.
-IMPORTANTE: Fornisci solo ed esclusivamente le analisi, separate chiaramente dal delimitatore '|||'. Non includere mai i titoli dei libri nelle tue risposte.
+Analizza la somiglianza di ciascun libro consigliato con il libro di riferimento, considerando stile, genere, trama, ambientazione e tono.
+IMPORTANTE: Fornisci solo le analisi, separate dal delimitatore '|||'. Non includere i titoli dei libri.
 """
 
-        # Endpoint oficial directo v1
-        url = f"https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key={gemini_api_key}"
+        # Generamos el contenido de manera simple con el SDK oficial
+        response = model.generate_content(prompt)
         
-        headers = {
-            'Content-Type': 'application/json'
-        }
-        
-        # Payload ultra limpio estructurado según la documentación base
-        payload = {
-            "contents": [{
-                "parts": [{"text": prompt}]
-            }]
-        }
-
-        response = requests.post(url, json=payload, headers=headers)
-        response_data = response.json()
-
-        if response.status_code != 200:
-            print(f"DEBUG ERROR GOOGLE API: {response_data}")
-            error_msg = response_data.get('error', {}).get('message', 'Error desconocido')
-            return jsonify({"error": "Error en la API de Google.", "details": error_msg}), response.status_code
-
-        try:
-            ai_text = response_data['candidates'][0]['content']['parts'][0]['text']
-        except KeyError:
-            print(f"DEBUG ESTRUCTURA INESPERADA: {response_data}")
-            return jsonify({"error": "Estructura de respuesta inesperada de la IA."}), 500
-        
-        analyses = ai_text.split('|||')
+        analyses = response.text.split('|||')
         analysis_by_title = {}
 
         for i, rec in enumerate(recommendations):
@@ -216,6 +196,7 @@ def suggest_titles():
         conn = get_db_connection()
         cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
         cur.execute("SELECT DISTINCT titolo FROM books WHERE TRIM(titolo) ILIKE %s ORDER BY titolo LIMIT 10", (f"%{search_query.strip()}%",))
+        # Corregido el bucle duplicado aquí
         suggestions = [row['titolo'] for row in cur.fetchall()]
         cur.close()
         return jsonify(suggestions), 200
