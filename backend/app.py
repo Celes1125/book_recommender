@@ -148,7 +148,6 @@ def deep_dive():
             [f" - Titolo: {rec['titolo']}, Sinossi: {rec['synopsis']}" for rec in recommendations]
         )
 
-        # Agregamos la instrucción del sistema al inicio del prompt de forma explícita
         prompt = f"""
 Sei un critico letterario esperto. Rispondi sempre e solo in italiano.
 
@@ -162,14 +161,13 @@ Analizza la somiglianza di ciascun libro consigliato con il libro di riferimento
 IMPORTANTE: Fornisci solo le analisi, separate dal delimitatore '|||'. Non includere i titoli dei libri.
 """
 
-        # Petición HTTP Directa usando la API estable v1 y el modelo gemini-1.5-flash
-        url = f"https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key={gemini_api_key}"
+        # CAMBIO CLÍTICO AQUÍ: Cambiamos gemini-1.5-flash por gemini-pro en la URL base de la versión v1
+        url = f"https://generativelanguage.googleapis.com/v1/models/gemini-pro:generateContent?key={gemini_api_key}"
         
         headers = {
             'Content-Type': 'application/json'
         }
         
-        # El payload ahora solo contiene "contents", cumpliendo estrictamente la especificación v1
         payload = {
             "contents": [{
                 "parts": [{"text": prompt}]
@@ -179,13 +177,11 @@ IMPORTANTE: Fornisci solo le analisi, separate dal delimitatore '|||'. Non inclu
         response = requests.post(url, json=payload, headers=headers)
         response_data = response.json()
 
-        # Si Google responde un error (como API key inválida o cuota), lo capturamos
         if response.status_code != 200:
             print(f"DEBUG ERROR GOOGLE API: {response_data}")
             error_msg = response_data.get('error', {}).get('message', 'Error desconocido')
             return jsonify({"error": "Error en la API de Google.", "details": error_msg}), response.status_code
 
-        # Extraemos el texto generado de la respuesta JSON estándar
         try:
             ai_text = response_data['candidates'][0]['content']['parts'][0]['text']
         except KeyError:
