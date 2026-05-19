@@ -5,7 +5,7 @@ import psycopg2
 import psycopg2.extras
 from dotenv import load_dotenv
 import os
-import requests  # <-- Usamos requests para control total de la URL de Google
+import requests
 import firebase_admin
 from firebase_admin import credentials, auth
 from functools import wraps
@@ -148,26 +148,28 @@ def deep_dive():
             [f" - Titolo: {rec['titolo']}, Sinossi: {rec['synopsis']}" for rec in recommendations]
         )
 
-        prompt = f"""
-Sei un critico letterario esperto. Rispondi sempre e solo in italiano.
+        # Inyectamos las instrucciones de comportamiento directamente en el prompt principal
+        # para máxima compatibilidad con el endpoint estable v1 básico de HTTP
+        prompt = f"""Tu sei un critico letterario esperto. Rispondi sempre e solo in lingua italiana.
 
 Libro di riferimento: '{original_title}'
 Sinossi di riferimento: {original_synopsis}
 
-Libri consigliati:
+Libri consigliati da analizzare:
 {recommendations_text}
 
-Analizza la somiglianza di ciascun libro consigliato con il libro di riferimento, considerando stile, genere, trama, ambientazione e tono.
-IMPORTANTE: Fornisci solo le analisi, separate dal delimitatore '|||'. Non includere i titoli dei libri.
+Analizza la somiglianza di ciascun libro consigliato con il libro di riferimento, considerando lo stile, il genere, la trama, l'ambientazione e il tono.
+IMPORTANTE: Fornisci solo ed esclusivamente le analisi, separate chiaramente dal delimitatore '|||'. Non includere mai i titoli dei libri nelle tue risposte.
 """
 
-        # URL limpia estándar para producción usando el modelo vigente en la v1
+        # Endpoint oficial directo v1
         url = f"https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key={gemini_api_key}"
         
         headers = {
             'Content-Type': 'application/json'
         }
         
+        # Payload ultra limpio estructurado según la documentación base
         payload = {
             "contents": [{
                 "parts": [{"text": prompt}]
