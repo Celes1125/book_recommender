@@ -5,7 +5,7 @@ import psycopg2
 import psycopg2.extras
 from dotenv import load_dotenv
 import os
-import requests  # <-- Cambiamos la librería nativa por requests para control total de la URL
+import requests  # <-- Usamos requests para control total de la URL de Google
 import firebase_admin
 from firebase_admin import credentials, auth
 from functools import wraps
@@ -148,7 +148,10 @@ def deep_dive():
             [f" - Titolo: {rec['titolo']}, Sinossi: {rec['synopsis']}" for rec in recommendations]
         )
 
+        # Agregamos la instrucción del sistema al inicio del prompt de forma explícita
         prompt = f"""
+Sei un critico letterario esperto. Rispondi sempre e solo in italiano.
+
 Libro di riferimento: '{original_title}'
 Sinossi di riferimento: {original_synopsis}
 
@@ -159,20 +162,18 @@ Analizza la somiglianza di ciascun libro consigliato con il libro di riferimento
 IMPORTANTE: Fornisci solo le analisi, separate dal delimitatore '|||'. Non includere i titoli dei libri.
 """
 
-        # Petición HTTP Directa forzando la API estable v1 y usando el modelo gemini-1.5-flash
+        # Petición HTTP Directa usando la API estable v1 y el modelo gemini-1.5-flash
         url = f"https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key={gemini_api_key}"
         
         headers = {
             'Content-Type': 'application/json'
         }
         
+        # El payload ahora solo contiene "contents", cumpliendo estrictamente la especificación v1
         payload = {
             "contents": [{
                 "parts": [{"text": prompt}]
-            }],
-            "systemInstruction": {
-                "parts": [{"text": "Sei un critico letterario esperto. Rispondi sempre e solo in italiano."}]
-            }
+            }]
         }
 
         response = requests.post(url, json=payload, headers=headers)
@@ -184,7 +185,7 @@ IMPORTANTE: Fornisci solo le analisi, separate dal delimitatore '|||'. Non inclu
             error_msg = response_data.get('error', {}).get('message', 'Error desconocido')
             return jsonify({"error": "Error en la API de Google.", "details": error_msg}), response.status_code
 
-        # Extraemos el texto generado de la respuesta JSON
+        # Extraemos el texto generado de la respuesta JSON estándar
         try:
             ai_text = response_data['candidates'][0]['content']['parts'][0]['text']
         except KeyError:
