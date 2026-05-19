@@ -74,10 +74,12 @@ def get_db_connection():
 # --- Configuración de Gemini ---
 gemini_api_key = os.getenv("GEMINI_API_KEY")
 genai.configure(api_key=gemini_api_key)
+for m in genai.list_models():
+    print(m.name)
 
 # CORRECCIÓN: Usamos el modelo activo y correcto 'gemini-1.5-flash'
 model = genai.GenerativeModel(
-    model_name='gemini-1.5-flash',
+    model_name='gemini-2.0-flash',
     system_instruction="Sei un critico letterario esperto. Rispondi sempre e solo in italiano."
 )
 
