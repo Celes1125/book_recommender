@@ -161,8 +161,8 @@ Analizza la somiglianza di ciascun libro consigliato con il libro di riferimento
 IMPORTANTE: Fornisci solo le analisi, separate dal delimitatore '|||'. Non includere i titoli dei libri.
 """
 
-        # CAMBIO CLÍTICO AQUÍ: Cambiamos gemini-1.5-flash por gemini-pro en la URL base de la versión v1
-        url = f"https://generativelanguage.googleapis.com/v1/models/gemini-pro:generateContent?key={gemini_api_key}"
+        # URL limpia estándar para producción usando el modelo vigente en la v1
+        url = f"https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key={gemini_api_key}"
         
         headers = {
             'Content-Type': 'application/json'
