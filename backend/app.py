@@ -76,7 +76,7 @@ genai.configure(api_key=gemini_api_key)
 
 # Usamos gemini-1.5-flash que es el estándar actual y gratuito
 model = genai.GenerativeModel(
-    model_name='gemini-1.5-flash-latest',
+    model_name='gemini-pro',
     system_instruction="Sei un critico letterario esperto. Rispondi sempre e solo in italiano."
 )
 
