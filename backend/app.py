@@ -39,7 +39,7 @@ AUTHORIZED_EMAILS = os.getenv("AUTHORIZED_EMAILS", "").split(',')
 if not AUTHORIZED_EMAILS or AUTHORIZED_EMAILS == [""]:
     AUTHORIZED_EMAILS = []
 
-# --- Decorador de Autenticación (CORREGIDO) ---
+# --- Decorador de Autenticación (Corregido y verificado) ---
 def firebase_auth_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
@@ -48,7 +48,6 @@ def firebase_auth_required(f):
             return jsonify({"error": "Authorization header missing."}), 401
         try:
             id_token = auth_header.split(' ')[1]
-            # Aquí se verifica el token y se asigna a 'decoded_token'
             decoded_token = auth.verify_id_token(id_token)
             user_email = decoded_token.get('email')
             if user_email and user_email in AUTHORIZED_EMAILS:
@@ -76,7 +75,7 @@ def get_db_connection():
 gemini_api_key = os.getenv("GEMINI_API_KEY")
 genai.configure(api_key=gemini_api_key)
 
-# Usamos el modelo correcto 'gemini-1.5-flash' configurado de forma limpia
+# CORRECCIÓN: Usamos el modelo activo y correcto 'gemini-1.5-flash'
 model = genai.GenerativeModel(
     model_name='gemini-1.5-flash',
     system_instruction="Sei un critico letterario esperto. Rispondi sempre e solo in italiano."
@@ -168,7 +167,7 @@ Analizza la somiglianza di ciascun libro consigliato con il libro di riferimento
 IMPORTANTE: Fornisci solo le analisi, separate dal delimitatore '|||'. Non includere i titoli dei libri.
 """
 
-        # Generamos el contenido de manera simple con el SDK oficial
+        # Generamos el contenido usando el SDK estándar limpio
         response = model.generate_content(prompt)
         
         analyses = response.text.split('|||')
