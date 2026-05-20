@@ -79,7 +79,7 @@ for m in genai.list_models():
 
 # CORRECCIÓN: Usamos el modelo activo y correcto 'gemini-1.5-flash'
 model = genai.GenerativeModel(
-    model_name='gemini-2.0-flash',
+    model_name='gemini-3-flash',
     system_instruction="Sei un critico letterario esperto. Rispondi sempre e solo in italiano."
 )
 
