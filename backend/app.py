@@ -79,10 +79,19 @@ for m in genai.list_models():
 
 # CORRECCIÓN: Usamos el modelo activo y correcto 'gemini-1.5-flash'
 model = genai.GenerativeModel(
-    model_name='gemini-3-flash',
+    model_name='gemini-3.5-flash',
     system_instruction="Sei un critico letterario esperto. Rispondi sempre e solo in italiano."
 )
 
+
+
+
+
+response = client.models.generate_content(
+    model="gemini-3.5-flash", # Actualizado desde gemini-1.5-flash
+    contents="Tu prompt aquí",
+)
+print(response.text)
 # --- Rutas de la API ---
 
 @app.route('/api/recomend', methods=['POST'])
