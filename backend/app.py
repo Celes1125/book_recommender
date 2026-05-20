@@ -83,15 +83,6 @@ model = genai.GenerativeModel(
     system_instruction="Sei un critico letterario esperto. Rispondi sempre e solo in italiano."
 )
 
-
-
-
-
-response = client.models.generate_content(
-    model="gemini-3.5-flash", # Actualizado desde gemini-1.5-flash
-    contents="Tu prompt aquí",
-)
-print(response.text)
 # --- Rutas de la API ---
 
 @app.route('/api/recomend', methods=['POST'])
